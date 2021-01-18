@@ -15,5 +15,9 @@
 	"homepage": "https://www.github.com/ChristianFischer/lichtlein",
 
 	"frameworks": "*",
-	"platforms": "*"
+	"platforms": "*",
+
+	"dependencies": {
+		"mike-matera/ArduinoSTL": "^1.1.0"
+	}
 }

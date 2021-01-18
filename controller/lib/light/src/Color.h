@@ -111,6 +111,28 @@ namespace lichtlein {
 		};
 	};
 
+
+
+	/**
+	 * Blend between two different colors creating a mixture between them.
+	 * @param a The first color to blend from
+	 * @param b The second color to blend to
+	 * @param p The progress value which represents the progress to blend between a and b
+	 * @param t The maximum progress which means the blending will result in 100% of color b
+	 * @return The blending result color between a and b
+	 */
+	Color blend(const Color& a, const Color& b, uint32_t p, uint32_t t);
+
+
+	/**
+	 * Blend between two different colors creating a mixture between them.
+	 * @param a The first color to blend from
+	 * @param b The second color to blend to
+	 * @param f The progress of blending between a and b where 0 means 100% of color a and 1 means 100% of color b
+	 * @return The blending result color between a and b
+	 */
+	Color blend(const Color& a, const Color& b, float f);
+
 }
 
 

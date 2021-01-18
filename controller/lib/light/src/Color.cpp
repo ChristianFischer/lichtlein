@@ -45,4 +45,31 @@ namespace lichtlein {
 		return wrgb;
 	}
 
+
+	Color blend(const Color& a, const Color& b, uint32_t p, uint32_t t) {
+		Color c;
+
+		for(int i=0; i<4; i++) {
+			c.components[i] =
+					(a.components[i] * (t - p) / t)
+				+	(b.components[i] * p / t)
+			;
+		}
+
+		return c;
+	}
+
+
+	Color blend(const Color& a, const Color& b, float f) {
+		Color c;
+
+		for(int i=0; i<4; i++) {
+			c.components[i] =
+					uint8_t(float(a.components[i]) * (1.0f - f))
+				+	uint8_t(float(b.components[i]) * f)
+			;
+		}
+
+		return c;
+	}
 }
