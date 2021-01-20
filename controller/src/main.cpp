@@ -18,56 +18,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "animators/ColorLoopAnimator.h"
+#include "LichtleinController.h"
 
-#include "Color.h"
-#include "LightBar.h"
-#include "LightBarBuilder.h"
-
-#include <Arduino.h>
-#include <Adafruit_NeoPixel.h>
-
-
-using namespace lichtlein;
-
-static constexpr uint16_t MAX_LIGHTS = 60;
-
-Adafruit_NeoPixel pixels(MAX_LIGHTS, 2);
-
-LightBar* light_bar = nullptr;
-Animator* animator  = nullptr;
+lichtlein::LichtleinController controller;
 
 
 
 void setup() {
-	if (light_bar == nullptr) {
-		light_bar = LightBarBuilder()
-				.setLightCount(MAX_LIGHTS)
-				.finish()
-		;
-	}
-
-	if (animator == nullptr) {
-		animator = ColorLoopAnimator::makeRainbowLoopAnimator();
-		light_bar->acquireLayer(animator, 0);
-	}
-
-	pixels.begin();
-	pixels.setBrightness(16);
+	controller.init();
 }
 
 
 void loop() {
-	uint32_t time = 50;
-
-	light_bar->update(time);
-	const auto& colors = light_bar->getFinalColors();
-
-	for(size_t i=0; i<MAX_LIGHTS; i++) {
-		pixels.setPixelColor(i, colors[i].wrgb);
-	}
-
-	pixels.show();
-
-	delay(time);
+	controller.update();
 }
