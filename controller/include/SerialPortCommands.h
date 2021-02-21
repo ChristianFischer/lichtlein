@@ -18,19 +18,43 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "LichtleinController.h"
 
-lichtlein::LichtleinController controller;
+#ifndef __CONTROLLER_SERIALPORTCOMMANDS_H__
+#define __CONTROLLER_SERIALPORTCOMMANDS_H__
+
+#include "stdint.h"
 
 
+namespace lichtlein {
 
-void setup() {
-	controller.init();
+	enum class SerialPortCommands : uint16_t {
+
+		/**
+		 * Unused
+		 */
+		None,
+
+		/**
+		 * Request the number of lights present for the light bar.
+		 *
+		 * Parameter:
+		 * None
+		 *
+		 * Reply:
+		 * 32bit integer containing the number of lights
+		 */
+		GetLightCount,
+
+		/**
+		 * Set the led_brightness for the light bar's LEDs
+		 *
+		 * Parameter:
+		 * 8 bit integer containing the desired led_brightness
+		 */
+		SetBrightness,
+
+	};
+
 }
 
-
-void loop() {
-	if (controller.isAlive()) {
-		controller.update();
-	}
-}
+#endif //__CONTROLLER_SERIALPORTCOMMANDS_H__

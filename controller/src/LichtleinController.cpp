@@ -22,9 +22,11 @@
 #include "LichtleinController.h"
 
 #include "animators/ColorLoopAnimator.h"
+#include "util/SerialCommUtils.h"
 
 #include "Animator.h"
 #include "LightBarBuilder.h"
+#include "SerialPortCommands.h"
 
 
 namespace lichtlein {
@@ -38,8 +40,10 @@ namespace lichtlein {
 
 
 	void LichtleinController::init() {
+		Serial.begin(SERIAL_BAUD_RATE);
+
 		pixels = new Adafruit_NeoPixel(LIGHT_BAR_LED_COUNT, LIGHT_BAR_PIN);
-		pixels->setBrightness(16);
+		pixels->setBrightness(led_brightness);
 		pixels->begin();
 
 		light_bar = LightBarBuilder()
@@ -49,6 +53,8 @@ namespace lichtlein {
 
 		animator = ColorLoopAnimator::makeRainbowLoopAnimator();
 		light_bar->acquireLayer(animator, 0);
+
+		alive = true;
 	}
 
 
@@ -67,11 +73,15 @@ namespace lichtlein {
 			delete light_bar;
 			light_bar = nullptr;
 		}
+
+		alive = false;
 	}
 
 
 	void LichtleinController::update() {
 		uint32_t time = UPDATE_TICK_TIME;
+
+		pollSerialMessages();
 
 		light_bar->update(time);
 		const auto& colors = light_bar->getFinalColors();
@@ -84,4 +94,58 @@ namespace lichtlein {
 
 		delay(time);
 	}
+
+
+	bool LichtleinController::isAlive() const {
+		return this->alive;
+	}
+
+
+	void LichtleinController::setBrightness(uint8_t brightness) {
+		this->led_brightness = brightness;
+
+		if (pixels) {
+			pixels->setBrightness(brightness);
+		}
+	}
+
+
+	uint8_t LichtleinController::getBrightness() const {
+		return this->led_brightness;
+	}
+
+
+	void LichtleinController::pollSerialMessages() {
+		while(Serial.available()) {
+			SerialPortCommands command;
+			readSerial(&command);
+
+			switch(command) {
+				case SerialPortCommands::GetLightCount: {
+					break;
+				}
+
+				case SerialPortCommands::SetBrightness: {
+					uint8_t brightness = 0;
+					readSerial(&brightness);
+
+					setBrightness(brightness);
+
+					break;
+				}
+
+				case SerialPortCommands::None:
+				default: {
+					Serial.print("Unexpected Command: ");
+					Serial.print(int(command), HEX);
+					Serial.print("\n");
+
+					this->alive = false;
+
+					break;
+				}
+			}
+		}
+	}
+
 }

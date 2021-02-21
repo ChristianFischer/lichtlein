@@ -18,19 +18,42 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "LichtleinController.h"
 
-lichtlein::LichtleinController controller;
+#include "Win32Error.h"
 
-
-
-void setup() {
-	controller.init();
-}
+#include <sstream>
 
 
-void loop() {
-	if (controller.isAlive()) {
-		controller.update();
+namespace lichtlein {
+
+	Win32Error::Win32Error(DWORD error_code) : error_code(error_code) {
 	}
+
+
+	void Win32Error::checkLastError() {
+		DWORD err = GetLastError();
+
+		if (err != ERROR_SUCCESS) {
+			throwWithErrorCode(0);
+		}
+	}
+
+
+	void Win32Error::throwWithErrorCode(DWORD error_code) {
+		throw Win32Error(error_code);
+	}
+
+
+	const char* lichtlein::Win32Error::what() const {
+		if (msg.empty()) {
+			std::stringstream ss;
+			ss << "Windows Error code #";
+			ss << error_code;
+
+			msg = ss.str();
+		}
+
+		return msg.c_str();
+	}
+
 }

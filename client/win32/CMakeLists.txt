@@ -9,6 +9,15 @@ add_executable(
 		src/main.cpp
 		src/MainWindow.h
 		src/MainWindow.cpp
+		src/SerialCommAgent.h
+		src/SerialCommAgent.cpp
 		src/TrayIcon.h
 		src/TrayIcon.cpp
+		src/Win32Error.h
+		src/Win32Error.cpp
+)
+
+target_include_directories(
+		lichtlein
+		PRIVATE ../../controller/include
 )

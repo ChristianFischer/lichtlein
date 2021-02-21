@@ -19,6 +19,7 @@
  */
 
 #include "TrayIcon.h"
+#include "SerialCommAgent.h"
 
 #include <string>
 
@@ -29,10 +30,29 @@ namespace lichtlein {
 		this->parent_hwnd = hWnd;
 		std::string tooltip_text = "Lichtlein";
 
+		// brightness menu
+		{
+			tray_popup_brightness = CreatePopupMenu();
+			CHAR buffer[64];
+
+			for(int i=0; i<10; i++) {
+				std::snprintf(
+						buffer,
+						sizeof(buffer) / sizeof(buffer[0]),
+						"%2d0 %%",
+						(i + 1)
+				);
+
+				AppendMenu(tray_popup_brightness, MF_STRING, MENU_ID_BRIGHTNESS_SET_BEGIN + i, buffer);
+			}
+		}
+
 		// create tray icon menu
-		tray_popup_menu = CreatePopupMenu();
-		AppendMenu(tray_popup_menu, MF_STRING, MENU_ID_SET_BRIGHTNESS, "Brightness");
-		AppendMenu(tray_popup_menu, MF_STRING, MENU_ID_EXIT,           "Exit");
+		{
+			tray_popup_menu = CreatePopupMenu();
+			AppendMenu(tray_popup_menu, MF_STRING | MF_POPUP, (UINT_PTR)tray_popup_brightness, "Brightness");
+			AppendMenu(tray_popup_menu, MF_STRING,            MENU_ID_EXIT,                    "Exit");
+		}
 
 		// set up tray icon
 		ZeroMemory(&tray_icon, sizeof(tray_icon));
@@ -76,7 +96,7 @@ namespace lichtlein {
 		UINT selected = displayMenuAtCursor(tray_popup_menu);
 
 		switch(selected) {
-			case MENU_ID_SET_BRIGHTNESS: {
+			case MENU_ID_BRIGHTNESS: {
 				break;
 			}
 
@@ -86,6 +106,15 @@ namespace lichtlein {
 			}
 
 			default: {
+				UINT selected_brightness = (selected - MENU_ID_BRIGHTNESS_SET_BEGIN);
+				if (selected_brightness >= 0 && selected_brightness < 10) {
+					uint8_t brightness_value = 255 * (selected_brightness + 1) / 10;
+
+					SerialCommAgent::getInstance().setBrightness(brightness_value);
+
+					return;
+				}
+
 				break;
 			}
 		}

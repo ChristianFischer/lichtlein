@@ -1,7 +1,7 @@
 {
 	"name": "light",
 	"version": "0.1",
-	"desciption": "Some utilites to manage lights and effects on arduino boards with RGB stripes",
+	"description": "Some utilities to manage lights and effects on arduino boards with RGB stripes",
 
 	"autors": [
 		{

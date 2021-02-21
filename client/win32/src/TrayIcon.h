@@ -43,16 +43,19 @@ namespace lichtlein {
 
 	public:
 		/// The icon's ID.
-		static constexpr int TRAY_ICON_ID           = 1000;
+		static constexpr int TRAY_ICON_ID                 = 1000;
 
 		/// The ID of the message received by WndProc
-		static constexpr int TRAY_ICON_MESSAGE_ID   = WM_USER + 1000;
+		static constexpr int TRAY_ICON_MESSAGE_ID         = WM_USER + 1000;
 
 		/// The ID of the Brightness submenu
-		static constexpr int MENU_ID_SET_BRIGHTNESS = WM_USER + 1010;
+		static constexpr int MENU_ID_BRIGHTNESS           = WM_USER + 1010;
+
+		/// The first ID to set the brightness value
+		static constexpr int MENU_ID_BRIGHTNESS_SET_BEGIN = WM_USER + 1020;
 
 		/// The ID of the exist button
-		static constexpr int MENU_ID_EXIT           = WM_USER + 1090;
+		static constexpr int MENU_ID_EXIT                 = WM_USER + 1090;
 
 	public:
 		/**
@@ -86,10 +89,11 @@ namespace lichtlein {
 		UINT displayMenuAtCursor(HMENU menu);
 
 	private:
-		BOOL           tray_icon_open  = FALSE;
-		HWND           parent_hwnd     = nullptr;
-		HMENU          tray_popup_menu = nullptr;
-		NOTIFYICONDATA tray_icon       = { };
+		BOOL           tray_icon_open        = FALSE;
+		HWND           parent_hwnd           = nullptr;
+		HMENU          tray_popup_menu       = nullptr;
+		HMENU          tray_popup_brightness = nullptr;
+		NOTIFYICONDATA tray_icon             = { };
 	};
 
 }

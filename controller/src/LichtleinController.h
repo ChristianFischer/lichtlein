@@ -51,6 +51,9 @@ namespace lichtlein {
 		/// The Arduino's pin, where the light bar is attached on
 		static constexpr uint16_t LIGHT_BAR_PIN       = 2;
 
+		/// Baud rate for communication via serial port
+		static constexpr uint32_t SERIAL_BAUD_RATE    = 9600;
+
 	public:
 		/**
 		 * Initializes the controller and all of it's components.
@@ -67,7 +70,30 @@ namespace lichtlein {
 		 */
 		void update();
 
+	public:
+		/**
+		 * Checks whether the controller is still alive.
+		 */
+		bool isAlive() const;
+
+		/**
+		 * Set the light bar's led_brightness.
+		 */
+		void setBrightness(uint8_t brightness);
+
+		/**
+		 * Get the light bar's led_brightness.
+		 */
+		uint8_t getBrightness() const;
+
 	private:
+		void pollSerialMessages();
+
+	private:
+		bool alive = false;
+
+		uint8_t led_brightness = 16;
+
 		Adafruit_NeoPixel* pixels    = nullptr;
 		LightBar*          light_bar = nullptr;
 		Animator*          animator  = nullptr;

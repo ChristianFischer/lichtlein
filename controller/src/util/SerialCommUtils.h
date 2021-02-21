@@ -18,19 +18,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "LichtleinController.h"
 
-lichtlein::LichtleinController controller;
+#ifndef __CONTROLLER_SERIALCOMMUTILS_H__
+#define __CONTROLLER_SERIALCOMMUTILS_H__
 
-
-
-void setup() {
-	controller.init();
-}
+#include <HardwareSerial.h>
 
 
-void loop() {
-	if (controller.isAlive()) {
-		controller.update();
+namespace lichtlein {
+
+	/**
+	 * Reads data from the serial port.
+	 * @tparam T the type of data to be read
+	 * @param data pointer to the target object where to store the data read
+	 * @return <c>true</c> if the data was read successfully
+	 */
+	template<class T>
+	bool readSerial(T* data) {
+		size_t bytes_expected = sizeof(*data);
+		size_t bytes_read     = Serial.readBytes(reinterpret_cast<uint8_t*>(data), bytes_expected);
+
+		return bytes_read == bytes_expected;
 	}
+
 }
+
+#endif //__CONTROLLER_SERIALCOMMUTILS_H__
