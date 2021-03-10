@@ -125,6 +125,20 @@ namespace lichtlein {
 		 */
 		void setBrightness(uint8_t brightness);
 
+		/**
+		 * Send a sequence of colors to the controller.
+		 * @param colors A list of RGB values to be sent
+		 */
+		void sendColorSequence(const std::vector<uint32_t>& colors);
+
+		/**
+		 * Send a sequence of colors to the controller.
+		 * This version only sends multiple copies of the same color.
+		 * @param count the number of colors to be sent
+		 * @param color the color to be sent
+		 */
+		void sendColorSequence(uint16_t count, uint32_t color);
+
 	private:
 		/**
 		 * Executes the given procedure after establishing a connection to the

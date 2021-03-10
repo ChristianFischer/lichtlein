@@ -47,9 +47,18 @@ namespace lichtlein {
 			}
 		}
 
+		// color menu
+		{
+			tray_popup_color = CreatePopupMenu();
+			AppendMenu(tray_popup_color, MF_STRING, MENU_ID_SET_COLOR_RED,   "Red");
+			AppendMenu(tray_popup_color, MF_STRING, MENU_ID_SET_COLOR_GREEN, "Green");
+			AppendMenu(tray_popup_color, MF_STRING, MENU_ID_SET_COLOR_BLUE,  "Blue");
+		}
+
 		// create tray icon menu
 		{
 			tray_popup_menu = CreatePopupMenu();
+			AppendMenu(tray_popup_menu, MF_STRING | MF_POPUP, (UINT_PTR)tray_popup_color,      "Set Color");
 			AppendMenu(tray_popup_menu, MF_STRING | MF_POPUP, (UINT_PTR)tray_popup_brightness, "Brightness");
 			AppendMenu(tray_popup_menu, MF_STRING,            MENU_ID_EXIT,                    "Exit");
 		}
@@ -102,6 +111,21 @@ namespace lichtlein {
 
 			case MENU_ID_EXIT: {
 				PostQuitMessage(0);
+				break;
+			}
+
+			case MENU_ID_SET_COLOR_RED: {
+				SerialCommAgent::getInstance().sendColorSequence(60, 0x00ff0000);
+				break;
+			}
+
+			case MENU_ID_SET_COLOR_GREEN: {
+				SerialCommAgent::getInstance().sendColorSequence(60, 0x0000ff00);
+				break;
+			}
+
+			case MENU_ID_SET_COLOR_BLUE: {
+				SerialCommAgent::getInstance().sendColorSequence(60, 0x000000ff);
 				break;
 			}
 

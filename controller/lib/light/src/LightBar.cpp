@@ -44,6 +44,11 @@ namespace lichtlein {
 	}
 
 
+	Layer* LightBar::acquireLayer(uint32_t sort_key) {
+		return acquireLayer(nullptr, sort_key);
+	}
+
+
 	Layer* LightBar::acquireLayer(Animator* animator, uint32_t sort_key) {
 		auto* layer = new Layer(this, animator, sort_key);
 		this->layers.push_back(layer);

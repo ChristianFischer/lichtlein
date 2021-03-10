@@ -159,6 +159,48 @@ namespace lichtlein {
 	}
 
 
+	void SerialCommAgent::sendColorSequence(const std::vector<uint32_t>& colors) {
+		runWithConnection(
+				[this, &colors] {
+					auto count = uint16_t(colors.size());
+
+					send(SerialPortCommands::ColorSequence);
+					send(count);
+
+					for(auto& color : colors) {
+						uint8_t r = (color >> 16) & 0xff;
+						uint8_t g = (color >>  8) & 0xff;
+						uint8_t b = (color >>  0) & 0xff;
+
+						send(r);
+						send(g);
+						send(b);
+					}
+				}
+		);
+	}
+
+
+	void SerialCommAgent::sendColorSequence(uint16_t count, uint32_t color) {
+		runWithConnection(
+				[this, count, color] {
+					uint8_t r = (color >> 16) & 0xff;
+					uint8_t g = (color >>  8) & 0xff;
+					uint8_t b = (color >>  0) & 0xff;
+
+					send(SerialPortCommands::ColorSequence);
+					send(count);
+
+					for(uint16_t i=0; i<count; i++) {
+						send(r);
+						send(g);
+						send(b);
+					}
+				}
+		);
+	}
+
+
 	bool SerialCommAgent::runWithConnection(const std::function<void()>& proc) {
 		try {
 			// check for any pending error

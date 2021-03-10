@@ -47,7 +47,19 @@ namespace lichtlein {
 	}
 
 
+	const Color& Layer::getColor(size_t index) const {
+		return this->colors[index];
+	}
+
+
+	Color* Layer::getColorRawPtr(size_t index) {
+		return &(this->colors[index]);
+	}
+
+
 	void Layer::update(uint32_t dt) {
-		this->animator->update(this, dt);
+		if (this->animator) {
+			this->animator->update(this, dt);
+		}
 	}
 }

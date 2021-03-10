@@ -22,6 +22,7 @@
 #define __CONTROLLER_LICHTLEINCONTROLLER_H__
 
 #include "LightBar.h"
+#include "StreamController.h"
 
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
@@ -90,13 +91,15 @@ namespace lichtlein {
 		void pollSerialMessages();
 
 	private:
-		bool alive = false;
+		bool alive     = false;
+		bool listening = true;
 
 		uint8_t led_brightness = 16;
 
 		Adafruit_NeoPixel* pixels    = nullptr;
 		LightBar*          light_bar = nullptr;
 		Animator*          animator  = nullptr;
+		StreamController   stream_controller;
 	};
 
 }

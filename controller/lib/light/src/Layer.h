@@ -96,6 +96,22 @@ namespace lichtlein {
 		void setColor(size_t index, size_t count, Color color);
 
 		/**
+		 * Get the color at a given index.
+		 * @param index The index of the color to receive
+		 * @return The color value on the given index
+		 */
+		const Color& getColor(size_t index) const;
+
+		/**
+		 * Get the raw pointer to the color at a given index.
+		 * This allows direct write into the layer's data,
+		 * but won't invoke any callbacks or handlers.
+		 * @param index The index of the color to receive
+		 * @return The color value on the given index
+		 */
+		Color* getColorRawPtr(size_t index);
+
+		/**
 		 * Updates this layer's content.
 		 * @param dt The time passed in milliseconds
 		 */

@@ -54,6 +54,11 @@ namespace lichtlein {
 		/// The first ID to set the brightness value
 		static constexpr int MENU_ID_BRIGHTNESS_SET_BEGIN = WM_USER + 1020;
 
+		/// The first ID to set the light bar color
+		static constexpr int MENU_ID_SET_COLOR_RED        = WM_USER + 1030;
+		static constexpr int MENU_ID_SET_COLOR_GREEN      = WM_USER + 1031;
+		static constexpr int MENU_ID_SET_COLOR_BLUE       = WM_USER + 1032;
+
 		/// The ID of the exist button
 		static constexpr int MENU_ID_EXIT                 = WM_USER + 1090;
 
@@ -93,6 +98,7 @@ namespace lichtlein {
 		HWND           parent_hwnd           = nullptr;
 		HMENU          tray_popup_menu       = nullptr;
 		HMENU          tray_popup_brightness = nullptr;
+		HMENU          tray_popup_color      = nullptr;
 		NOTIFYICONDATA tray_icon             = { };
 	};
 

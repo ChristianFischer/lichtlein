@@ -83,6 +83,13 @@ namespace lichtlein {
 
 	public:
 		/**
+		 * Acquires a layer without binding it to an animator.
+		 * @param sort_key An integer value to define the sort order
+		 * @return The new acquired layer
+		 */
+		Layer* acquireLayer(uint32_t sort_key);
+
+		/**
 		 * Acquires a layer to be used for the given animator.
 		 * @param animator The animator to play animations on the resulting layer
 		 * @param sort_key An integer value to define the sort order

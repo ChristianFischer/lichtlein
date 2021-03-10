@@ -53,6 +53,15 @@ namespace lichtlein {
 		 */
 		SetBrightness,
 
+		/**
+		 * Send a sequence of colors to the controller.
+		 *
+		 * Parameter:
+		 * 16 bit integer for the number if colors to follow
+		 * 24 bit RGB value per color
+		 */
+		ColorSequence,
+
 	};
 
 }

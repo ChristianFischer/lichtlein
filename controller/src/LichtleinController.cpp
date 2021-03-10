@@ -54,6 +54,8 @@ namespace lichtlein {
 		animator = ColorLoopAnimator::makeRainbowLoopAnimator();
 		light_bar->acquireLayer(animator, 0);
 
+		stream_controller.init(light_bar);
+
 		alive = true;
 	}
 
@@ -81,7 +83,11 @@ namespace lichtlein {
 	void LichtleinController::update() {
 		uint32_t time = UPDATE_TICK_TIME;
 
-		pollSerialMessages();
+		if (listening) {
+			pollSerialMessages();
+		}
+
+		stream_controller.update(time);
 
 		light_bar->update(time);
 		const auto& colors = light_bar->getFinalColors();
@@ -116,7 +122,7 @@ namespace lichtlein {
 
 
 	void LichtleinController::pollSerialMessages() {
-		while(Serial.available()) {
+		while(this->listening && Serial.available()) {
 			SerialPortCommands command;
 			readSerial(&command);
 
@@ -134,12 +140,18 @@ namespace lichtlein {
 					break;
 				}
 
+				case SerialPortCommands::ColorSequence: {
+					stream_controller.readColorStreamFromSerial();
+					break;
+				}
+
 				case SerialPortCommands::None:
 				default: {
 					Serial.print("Unexpected Command: ");
 					Serial.print(int(command), HEX);
 					Serial.print("\n");
 
+					this->listening = false;
 					this->alive = false;
 
 					break;
